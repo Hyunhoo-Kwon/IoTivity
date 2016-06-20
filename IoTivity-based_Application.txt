@@ -1,0 +1,37 @@
+Implement an IoTivity-based application on Linux/Android platform together with IoTivity framework for data exchange between devices in an IoT ervironment.
+ - Developing an IoTivity-based application with client/server paradigm
+ - How to use IoTivity framework for neighboring IoT device discovery, data exchanging with GET/PUT methods
+ - Remotely accessing/controlling resources in ToT environment
+ - Implementing and deploying an real IoT system
+
+Functional requirements:
+ - On initialization, the application on each device registers its RESOURCE TYPE (default itself)
+ - The application on a device joining the IoT network automatically DISCOVERs other devices (based on the registerd resource type) in the device's vicinity. For each discovered device, the application retrieves a HostLD for data exchange later
+ - After discovery, the application automatically queries for the full device's info. of each device, and then displays the info. on the screen
+ - From the user interface (command line of GUI), users are allowed to execute following commands:
+  1. List all the devices which have benn discovered
+  2. Refresh the list of devices (re-discover all the neighboring devices)
+  3. Send a text message to any device selected from the list of devices. The message is displayed at the receiver side
+Non-funcional requirements:
+ - Full device info. may include 'current energy level', 'capability', 'storage capacity', etc. Those values can be hardcoded in the application. Real values obtained from the device result in bonus points
+ - To minimize the cost of data exchange, the sender might piggyback its full device info. in its query's payload; so that the receiver can obtain the device info. of the sender upon receiving the query
+ - Implementation of the application on Android platform will also result in bonus points
+
+*The application requires both sending and receiving functionalities in a single IoT device. Hence, the application should implemnet 2 modules:
+ 1. Client module
+ - Initialized in CLIENT mode
+ - Find the resources, and then store these objects in a list for later use
+ - Retrieve full device info.: using method get() -- a built-in member function of OCResource class. Note that method get() can piggyback some data by its input parameter
+ - Send a text message: using method put() (similar to get())
+ 2. Server module (Linux/Android):
+ - Initialized in SERVER mode, listen to all incoming requests/messages
+ - Handle differnet types of request (get,put) and the respond through the entityHandler() function
+
+Complie a client/server program using IoTivity framework:
+For each newly added <yourfilename>.cpp file in the resource/examples folder, we have to declare it in the complication list by:
+ - Open Sconscript in resource/examples
+ - Under '#source files and Targets' tag, add
+  <yourfilename>=examples_env.Program('<Yourfilename>','<yourfilename>.cpp')
+ - Append <yourfilename> to the 'Alias' list
+ - Get back to the /iotivity/ root folder, execute the command:
+  <prompt>$ scons resource/examples
